@@ -38,7 +38,10 @@ app.engine('.hbs', exphbs.engine({
     extname: '.hbs',
     helpers: {
         getValue: function(obj, key) {
-            return obj[key]
+            return obj[key];
+        },
+        cleanFees: function() {
+            
         }
     },
     defaultLayout: 'main',
@@ -224,6 +227,31 @@ app.get('/viewData', (req, res) => {
         });
     });
 });
+
+// viewData/clean route
+app.get('/viewData/clean', (req, res) => {
+    fs.readFile('airbnb_with_photos.json.gz', (err, content) => {
+        if (err) {
+            return res.render('data', { title: 'Error', message: `Error: ${err.code}` });
+        }
+        zlib.gunzip(content, (err, buffer) => {
+            if (err) {
+                return res.render('data', { title: 'Error', message: `Error: ${err.code}` });
+            }
+            const data = JSON.parse(buffer.toString());
+
+            let filtered = [];
+
+            data.forEach(function(property) {
+                if (!property['service fee'] == '') {
+                    filtered.push(property);
+                }
+            });
+            res.render('viewData', { clean: true, title: 'Airbnb Listings', records: filtered});
+        });
+    });
+});
+
 
 // viewData/price route
 app.get('/viewData/price', (req, res) => {
