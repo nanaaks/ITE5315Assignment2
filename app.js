@@ -211,7 +211,18 @@ app.post(
 
 // viewData route
 app.get('/viewData', (req, res) => {
-    res.render('viewData', { title: 'Airbnb Data' });
+    fs.readFile('airbnb_with_photos.json.gz', (err, content) => {
+        if (err) {
+            return res.render('data', { title: 'Error', message: `Error: ${err.code}` });
+        }
+        zlib.gunzip(content, (err, buffer) => {
+            if (err) {
+                return res.render('data', { title: 'Error', message: `Error: ${err.code}` });
+            }
+            const data = JSON.parse(buffer.toString());
+            res.render('viewData', { title: 'Airbnb Listings', records: data});
+        });
+    });
 });
 
 // viewData/price route
