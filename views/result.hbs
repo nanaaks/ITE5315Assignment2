@@ -1,0 +1,22 @@
+{{#if error}}
+<h1>{{message}}</h1>
+{{/if}}
+
+{{#unless error}}
+{{#each results}}
+<h3>{{this.NAME}}</h3>
+    {{#each this.images}}
+    <img src="{{this}}" alt="Image">
+    {{/each}}
+    <ul>
+        <li>Neighbourhood: {{this.neighbourhood}}</li>
+        <li>City/Town: {{getValue this 'neighbourhood group'}}</li>
+        <li>Country: {{this.country}}</li>
+        <li>Room Type: {{getValue this 'room type'}}</li>
+        <li>Property Type: {{this.property_type}}</li>
+        <li>Price: {{this.price}}</li>
+        <li>Service Fee: {{getValue this 'service fee'}}</li>
+    </ul>
+    </br>
+{{/each}}
+{{/unless}}
