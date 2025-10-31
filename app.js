@@ -40,8 +40,12 @@ app.engine('.hbs', exphbs.engine({
         getValue: function(obj, key) {
             return obj[key];
         },
-        cleanFees: function() {
-            
+        getFee: function(obj, key) {
+            if (obj[key] == '') {
+                return 0;
+            } else {
+                return obj[key];
+            }
         }
     },
     defaultLayout: 'main',
@@ -247,7 +251,7 @@ app.get('/viewData/clean', (req, res) => {
                     filtered.push(property);
                 }
             });
-            res.render('viewData', { clean: true, title: 'Airbnb Listings', records: filtered});
+            res.render('viewData', { title: 'Airbnb Listings', records: filtered});
         });
     });
 });

@@ -17,35 +17,8 @@
         <td>{{getValue this 'room type'}}</td>
         <td>{{this.property_type}}</td>
         <td>{{this.price}}</td>
-        <td>{{getValue this 'service fee'}}</td>
+        <td>{{getFee this 'service fee'}}</td>
         <td><img src="{{this.thumbnail}}" alt="Image"></td>
     </tr>
 {{/each}}
 </table>
-
-{{#if clean}}
-<table border="1">
-    <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Location</th>
-        <th>Room Type</th>
-        <th>Property Type</th>
-        <th>Price</th>
-        <th>Service Fee</th>
-        <th>Image</th>
-    </tr>
-{{#each records}}
-    <tr>
-        <td>{{this.id}}</td>
-        <td>{{this.NAME}}</td>
-        <td>{{getValue this 'neighbourhood group'}}, {{this.country}}</td>
-        <td>{{getValue this 'room type'}}</td>
-        <td>{{this.property_type}}</td>
-        <td>{{this.price}}</td>
-        <td>{{getValue this 'service fee'}}</td>
-        <td><img src="{{this.thumbnail}}" alt="Image"></td>
-    </tr>
-{{/each}}
-</table>
-{{/if}}
