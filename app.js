@@ -257,10 +257,73 @@ app.get('/viewData/clean', (req, res) => {
 });
 
 
-// viewData/price route
+// viewData/price GET route to display form
 app.get('/viewData/price', (req, res) => {
     res.render('price', { title: 'Price' });
 });
+
+// viewData/price POST route for form submision and validation
+app.post('/viewData/price', (req, res) => {
+    res.render('result', { title: 'Price' });
+});
+
+// form submision and validation
+app.post(
+    '/submit',
+
+    [
+        body('min')
+            .isNumeric()
+            .withMessage('Minimum price must be a number')
+            .notEmpty()
+            .withMessage('Minimum price is required')
+            .escape(),
+
+        body('max')
+            .isNumeric()
+            .withMessage('Maximum price must be a number')
+            .notEmpty()
+            .withMessage('Maximum price is required')
+            .escape(),
+    ],
+
+    (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            const messages = errors.array().map(err => err.msg).join(" and ");
+            return res.status(400).render('result', { error: true, title: 'Error', message: messages });
+        }
+
+        const { min, max } = req.body;
+        
+        fs.readFile('airbnb_with_photos.json.gz', (err, content) => {
+            if (err) {
+                return res.render('data', { title: 'Error', message: `Error: ${err.code}` });
+            }
+            zlib.gunzip(content, (err, buffer) => {
+                if (err) {
+                    return res.render('data', { title: 'Error', message: `Error: ${err.code}` });
+                }
+                const data = JSON.parse(buffer.toString());
+                
+                let found = [];
+                
+                data.forEach(function(property) {
+                    if (min <= property.price <= max) {
+                        found.push(property);
+                    }
+                });
+                
+                if (found.length == 0) {
+                    res.render('result', { error: true, title: 'Search Results', message: "No Properties Found"});
+                } else {
+                    res.render('result', { error: false, title: 'Search Results', results: found});
+                }
+            });
+        })
+    }
+);
+
 
 // Error handler for the wrong route (404)
 app.get('/{*splat}', function (req, res) {
