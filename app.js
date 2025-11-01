@@ -309,7 +309,10 @@ app.post(
                 let found = [];
                 
                 data.forEach(function(property) {
-                    if (min <= property.price <= max) {
+
+                    const price = parseFloat(property.price.replace(/[^0-9.-]+/g, ""));
+
+                    if (min <= price <= max) {
                         found.push(property);
                     }
                 });
