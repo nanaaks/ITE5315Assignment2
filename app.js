@@ -262,11 +262,6 @@ app.get('/viewData/price', (req, res) => {
     res.render('price', { title: 'Price' });
 });
 
-// viewData/price POST route for form submision and validation
-app.post('/viewData/price', (req, res) => {
-    res.render('result', { title: 'Price' });
-});
-
 // form submision and validation
 app.post(
     '/submit',
@@ -312,7 +307,7 @@ app.post(
 
                     const price = parseFloat(property.price.replace(/[^0-9.-]+/g, ""));
 
-                    if (min <= price <= max) {
+                    if (min <= price && price <= max) {
                         found.push(property);
                     }
                 });
